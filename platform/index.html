@@ -95,9 +95,9 @@
 
         <div class="summary">
           <p class="lead reveal" style="--i:2">
-            The FICO Platform serves multiple user roles with different priorities. Without tailored experiences, users face information overload. The homepage was designed to adapt based on the assigned roles.</p>
+            Every user of the FICO Platform landed on the same generic screen, whether they were an admin, an analyst or a solution builder. I led the design of two things that fix that: the admin flow that provisions users and roles, and the role-based homepages that make the platform show each person what matters to them.</p>
           <p class="lead reveal" style="--i:3">
-           I designed the onboarding experience and role-based dashboard system for the FICO Platform, enabling workspace personalization by role.
+            I owned the design strategy end to end, from the admin provisioning flow to the persona landing pages. I worked with the Product Managers and architects to decide what shipped first and what we tested at FICO World. The first internal release focused on admin provisioning, since every other user depends on it.</p>
         </div>
       </div>
     </section>
@@ -112,28 +112,22 @@
       </div>
     </section>
 
-    <!-- ============ PROBLEM ============ -->
-    <section class="chapter wrap" id="problem">
-      <div class="chapter__grid">
-        <h2 class="chapter__title">Problem Statement</h2>
-        <div class="chapter__body">
-          <p class="lead">
-            Homepages cluttered with irrelevant information can overwhelm users and bury what matters. Without personalized experiences, users could waste time navigating to irrelevant features and data.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ LEGACY UI ============ -->
+    <!-- ============ CONTEXT ============ -->
     <section class="chapter wrap" id="legacy-ui">
       <div class="chapter__grid">
-        <h2 class="chapter__title">The Existing Tool</h2>
+        <h2 class="chapter__title">Context</h2>
         <div class="chapter__body">
-          <figure class="figure">
+          <p class="lead">
+            Users struggle with the current platform. Homepages cluttered with irrelevant information leave them unsure what to do next and bury what matters.</p>
+            <br>
+            <p class="lead">With no way to organize users by role, everyone is forced into the same generic experience.</p>
+
+          <figure class="figure" style="padding-top:1em;">
             <div class="carousel" data-carousel aria-roledescription="carousel" aria-label="Legacy DMP screens">
               <div class="carousel__viewport">
                 <div class="carousel__track">
                   <img src="assets/dmp/dmp-landingpage.png" alt="First screen users see no matter the type of user." data-caption="This would be the first screen users see no matter the type of user.">
-                  <img src="assets/dmp/dmp-create.png" alt="ew of the inner front pages looked too technical." data-caption="Few of the inner front pages looked too technical.">
+                  <img src="assets/dmp/dmp-create.png" alt="Few of the inner front pages looked too technical." data-caption="Few of the inner front pages looked too technical.">
                   <img src="assets/dmp/dmp-catalogue.png" alt="Catalogue pages of the Solutions available." data-caption="Catalogue pages of the Solutions available.">
                 </div>
               </div>
@@ -152,13 +146,6 @@
             <figcaption class="gif-caption" style="text-align:center;" data-carousel-caption>Many UX issues in Legacy UI</figcaption>
           </figure>
 
-          <div class="subblock">
-            <p class="lead">
-              Users struggle with the current platform. Too much irrelevant information leaves them confused about what to do next, wasting time navigating a one-size-fits-all interface. The problem is worsened by the inability to organize users by role, which prevents some from accessing their workspaces and forces everyone into the same generic experience.</p>
-              <br>
-            <p class="lead">The result is a one-size-fits-all system that leaves users without visibility into what's actually working or its business impact.
-            </p>
-          </div>
         </div>
       </div>
     </section>
@@ -166,22 +153,6 @@
     <!-- ============ User Provisioning Flow ============ -->
     <section class="brand-banner">
       <p class="brand-banner__text">User Access Setup</p>
-    </section>
-
-    <!-- ============ WHY IT WORKS ============ -->
-    <section class="chapter wrap" id="why-it-works">
-      <div class="chapter__grid">
-        <h2 class="chapter__title">Overview</h2>
-        <div class="chapter__body">
-          <p class="lead">
-            The FICO Platform serves a diverse group of users, from analysts to executives to admins, each with different priorities and goals.
-          </p>
-          <br>
-          <p class="lead">
-           For the initial internal release, the team focused on the admin setup and provisioning of user groups, as they are the essential pre-requisite for all downstream users.
-          </p>
-        </div>
-      </div>
     </section>
 
     <!-- ============ FULL WIDTH SCHEMA COMPARISON ============ -->
@@ -280,7 +251,48 @@
       </div>
     </section>
 
-    <!-- ============ User Provisioning Flow ============ -->
+    <!-- ============ KEY DESIGN DECISIONS ============ -->
+    <!-- TODO (Levona): fill in optional lines marked below, then remove these comments. -->
+    <section class="chapter wrap" id="key-decisions">
+      <div class="chapter__grid chapter__grid--decisions">
+        <h2 class="chapter__title">Key Design Decisions</h2>
+        <div class="decision-grid">
+
+          <div class="phase decision-tile">
+            <span class="phase__title">1. Provisioning first, dashboards second</span>
+            <div class="lead">
+              <p><strong>The choice:</strong> For the first internal release, we built admin provisioning and user-group setup before the persona dashboards.</p>
+              <p><strong>The alternative:</strong> Most of the team wanted to ship the three persona dashboards first, since that's what the majority of users would see.</p>
+              <p><strong>Why provisioning won:</strong> The VP of Architecture opposed this and argued that setup has to work seamlessly before anything else can function. Without provisioned users, roles and groups, no one reaches a personalized workspace.</p>
+              <!-- TODO: your stance + whether dashboards kept moving in parallel (trade-off). -->
+            </div>
+          </div>
+
+
+          <div class="phase decision-tile">
+            <span class="phase__title">2. Testing three landing pages, with a known limit</span>
+            <div class="lead">
+              <p><strong>The choice:</strong> I couldn't attend FICO World in person. With the Product Manager, Front-End Architect and User Researchers, we narrowed the showcase to three landing pages: Service Creator, Business Analyst and Solution Creator. These pages carry the most varied, user-specific information and are the most revisited.</p>
+              <p><strong>The limitation:</strong> The people we tested with weren't true representatives of each persona, so we likely didn't catch every pain point. I treat the findings as strong early signal, not proof.</p>
+              <!-- TODO (optional): next step, e.g. validate with real persona users before launch. -->
+            </div>
+          </div>
+
+          <div class="phase decision-tile">
+            <span class="phase__title">3. A restrained homepage for each role</span>
+            <div class="lead">
+              <p><strong>The choice:</strong> Each persona's homepage shows only what that role needs most, not everything the platform can do.</p>
+              <p><strong>Why:</strong> Too much information was the original problem, so I didn't want to repeat it. Some components and features also don't appear for certain user groups because of permissions, so the layouts had to hold together whichever pieces a user is allowed to see.</p>
+              <p><strong>Trade-off:</strong> Role-specific pages mean more design and build work per persona, and less discoverability of features outside someone's role.</p>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Personalized Workspaces ============ -->
     <section class="brand-banner">
       <p class="brand-banner__text">Personalized Workspaces</p>
     </section>
@@ -307,6 +319,9 @@
         </div>
       </div>
     </section>
+
+    <hr class="section-divider wrap">
+
 
     <!-- ============ USERS ============ -->
     <section class="chapter wrap" id="personas">
@@ -381,57 +396,6 @@
     </section>
     <hr class="section-divider wrap">
 
-
-    <!-- ============ LANDING PAGES ============ -->
-    <section class="chapter wrap" id="decisions">
-      <div class="chapter__grid chapter__grid--landing">
-        <h2 class="chapter__title">Landing Pages</h2>
-        <h3 class="subhead chapter__label">Service Creator</h3>
-        <div class="chapter__body">
-
-          <div class="decisions-list">
-            <div class="decision-card">
-              <figure class="figure">
-                <video class="autoplay-video theme-img-light" src="assets/eg-personas/video/ServiceCreator-landingpage.mp4" poster="assets/eg-personas/poster/ServiceCreator-landingpage.jpg" width="820" height="461" loop muted playsinline aria-label="Service Creator landing page"></video>
-                <video class="autoplay-video theme-img-dark" src="assets/eg-personas/video/ServiceCreator-landingpage-dark.mp4" poster="assets/eg-personas/poster/ServiceCreator-landingpage-dark.jpg" width="820" height="461" loop muted playsinline aria-label="Service Creator landing page"></video>
-              </figure>
-              <p class="lead">
-                The Service Creator's homepage is built to <strong>keep every active build in view.</strong> My Work consolidates all in-progress compositions in one place, while quick actions for creating solutions, browsing assets, and finding products sit above the fold for the tasks you do most.
-              </p>
-            </div>
-          </div>
-
-          <div class="decisions-list">
-            <div class="decision-card">
-              <h3 class="subhead">Business Analyst</h3>
-              <figure class="figure">
-                <video class="autoplay-video theme-img-light" src="assets/eg-personas/video/BA-landingpage.mp4" poster="assets/eg-personas/poster/BA-landingpage.jpg" width="820" height="461" loop muted playsinline aria-label="Business Analyst landing page"></video>
-                <video class="autoplay-video theme-img-dark" src="assets/eg-personas/video/BA-landingpage-dark.mp4" poster="assets/eg-personas/poster/BA-landingpage-dark.jpg" width="820" height="461" loop muted playsinline aria-label="Business Analyst landing page"></video>
-              </figure>
-              <p class="lead">
-                The Business Analyst's homepage is built to <strong>surface business performance at a glance.</strong> KPIs for fraud prevention, conversion, profitability, and spend sit up top, while a dedicated panel highlights which assets are driving results — so the Analyst can spot what's working without digging through reports.
-              </p>
-            </div>
-          </div>
-
-          <div class="decisions-list">
-            <div class="decision-card">
-              <h3 class="subhead">Solution Creator</h3>
-              <figure class="figure">
-                <video class="autoplay-video theme-img-light" src="assets/eg-personas/video/SolutionCreator-landingpage.mp4" poster="assets/eg-personas/poster/SolutionCreator-landingpage.jpg" width="820" height="461" loop muted playsinline aria-label="Solution Creator landing page"></video>
-                <video class="autoplay-video theme-img-dark" src="assets/eg-personas/video/SolutionCreator-landingpage-dark.mp4" poster="assets/eg-personas/poster/SolutionCreator-landingpage-dark.jpg" width="820" height="461" loop muted playsinline aria-label="Solution Creator landing page"></video>
-              </figure>
-              <p class="lead">
-                The Solution Creator's homepage is built to <strong>catch problems before they spread.</strong> An asset inventory tracks ownership and status, a live relationship map shows how solutions depend on each other and where work can be reused, and a real-time alert feed surfaces issues as they happen.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-<hr class="cta-divider reveal" style="--i:7">
-
     <!-- ============ RESEARCH FINDINGS ============ -->
     <section class="chapter wrap" id="impact">
       <div class="chapter__grid">
@@ -478,9 +442,100 @@
         </div>
       </div>
     </section>
-    
+
 
     <hr class="section-divider wrap">
+
+    <!-- ============ TESTED VS REDESIGNED ============ -->
+    <section class="chapter wrap" id="tested-redesigned">
+      <div class="chapter__grid chapter__grid--decisions">
+        <h2 class="chapter__title">Tested vs. Redesigned</h2>
+        <p class="lead" style="padding-top:0.25em;">Post-FICO, I continued using Figma x Claude Code on my own time, to redesign the 3 core landing pages with no technical restrictions and focusing on the feedback from FW2025.</p>
+        <div class="compare-list">
+          <div class="compare">
+            <h3 class="subhead">Service Creator</h3>
+            <div class="compare__pair">
+              <div class="compare__col">
+                <span class="compare__tag">Presented at FICO World 2025</span>
+                <figure class="figure">
+                  <video class="autoplay-video theme-img-light" src="assets/eg-personas/video/ServiceCreator-landingpage.mp4" poster="assets/eg-personas/poster/ServiceCreator-landingpage.jpg" width="820" height="461" loop muted playsinline aria-label="Service Creator landing page tested at FICO World"></video>
+                  <video class="autoplay-video theme-img-dark" src="assets/eg-personas/video/ServiceCreator-landingpage-dark.mp4" poster="assets/eg-personas/poster/ServiceCreator-landingpage-dark.jpg" width="820" height="461" loop muted playsinline aria-label="Service Creator landing page tested at FICO World"></video>
+                </figure>
+                <div class="lead">
+                  <p>The Service Creator's homepage is built to <strong>keep every active build in view.</strong> My Work consolidates all in-progress compositions in one place, while quick actions for creating solutions, browsing assets, and finding products sit above the fold for the tasks you do most.</p>
+                </div>
+              </div>
+              <div class="compare__col">
+                <span class="compare__tag compare__tag--accent">My Redesign 2026</span>
+                <figure class="figure">
+                  <video class="autoplay-video theme-img-light" src="assets/eg-personas/video/service-creator-claude-light.mp4" poster="assets/eg-personas/poster/service-creator-claude-light.jpg" width="820" height="461" loop muted playsinline aria-label="Service Creator redesigned landing page"></video>
+                  <video class="autoplay-video theme-img-dark" src="assets/eg-personas/video/service-creator-claude-dark.mp4" poster="assets/eg-personas/poster/service-creator-claude-dark.jpg" width="820" height="461" loop muted playsinline aria-label="Service Creator redesigned landing page"></video>
+                </figure>
+                <div class="lead">
+                  <p><strong>Value the Redesign Provides:</strong> The redesigned homepage gives the Service Creator a single place to run their day. Tasks, recent work and release status sit on one screen, with search across both. Items that need attention are flagged and sorted to the top, each composition shows its owner and dependents, and the release view lists what's blocking a release. The page can be customized to show only what they use.</p>
+                  <p><strong>Pain Point Relieved:</strong> Work spread across different tools meant missed deadlines and lost ownership. Tasks, owners and blockers now share one view, so overdue or at-risk work is visible and it's clear who is responsible.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="compare">
+            <h3 class="subhead">Business Analyst</h3>
+            <div class="compare__pair">
+              <div class="compare__col">
+                <span class="compare__tag">Presented at FICO World 2025</span>
+                <figure class="figure">
+                  <video class="autoplay-video theme-img-light" src="assets/eg-personas/video/BA-landingpage.mp4" poster="assets/eg-personas/poster/BA-landingpage.jpg" width="820" height="461" loop muted playsinline aria-label="Business Analyst landing page tested at FICO World"></video>
+                  <video class="autoplay-video theme-img-dark" src="assets/eg-personas/video/BA-landingpage-dark.mp4" poster="assets/eg-personas/poster/BA-landingpage-dark.jpg" width="820" height="461" loop muted playsinline aria-label="Business Analyst landing page tested at FICO World"></video>
+                </figure>
+                <div class="lead">
+                  <p>The Business Analyst's homepage is built to <strong>surface business performance at a glance.</strong> KPIs for fraud prevention, conversion, profitability, and spend sit up top, while a dedicated panel highlights which assets are driving results — so the Analyst can spot what's working without digging through reports.</p>
+                </div>
+              </div>
+              <div class="compare__col">
+                <span class="compare__tag compare__tag--accent">My Redesign 2026</span>
+                <figure class="figure">
+                  <video class="autoplay-video theme-img-light" src="assets/eg-personas/video/business-analyst-claude-light.mp4" poster="assets/eg-personas/poster/business-analyst-claude-light.jpg" width="820" height="461" loop muted playsinline aria-label="Business Analyst redesigned landing page"></video>
+                  <video class="autoplay-video theme-img-dark" src="assets/eg-personas/video/business-analyst-claude-dark.mp4" poster="assets/eg-personas/poster/business-analyst-claude-dark.jpg" width="820" height="461" loop muted playsinline aria-label="Business Analyst redesigned landing page"></video>
+                </figure>
+                <div class="lead">
+                  <p><strong>Value the Redesign Provides:</strong> The redesign turns the Business Analyst home from a performance snapshot into a decision-making hub. Each savings opportunity shows its dollar value, evidence and downstream impact. A dependency workspace reveals how assets connect, a change-impact check confirms safety before action, and a "needs your attention" strip prioritizes risky changes and flagged assets.</p>
+                  <p><strong>Pain Point Relieved:</strong> Analysts couldn't see asset connections, duplications or the downstream cost of changes, so they guessed or avoided risk. Making dependencies and the ripple of each change visible lets them build the case for savings and act safely.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="compare">
+            <h3 class="subhead">Solution Creator</h3>
+            <div class="compare__pair">
+              <div class="compare__col">
+                <span class="compare__tag">Presented at FICO World 2025</span>
+                <figure class="figure">
+                  <video class="autoplay-video theme-img-light" src="assets/eg-personas/video/SolutionCreator-landingpage.mp4" poster="assets/eg-personas/poster/SolutionCreator-landingpage.jpg" width="820" height="461" loop muted playsinline aria-label="Solution Creator landing page tested at FICO World"></video>
+                  <video class="autoplay-video theme-img-dark" src="assets/eg-personas/video/SolutionCreator-landingpage-dark.mp4" poster="assets/eg-personas/poster/SolutionCreator-landingpage-dark.jpg" width="820" height="461" loop muted playsinline aria-label="Solution Creator landing page tested at FICO World"></video>
+                </figure>
+                <div class="lead">
+                  <p>The Solution Creator's homepage is built to <strong>catch problems before they spread.</strong> An asset inventory tracks ownership and status, a live relationship map shows how solutions depend on each other and where work can be reused, and a real-time alert feed surfaces issues as they happen.</p>
+                </div>
+              </div>
+              <div class="compare__col">
+                <span class="compare__tag compare__tag--accent">My Redesign 2026</span>
+                <figure class="figure">
+                  <video class="autoplay-video theme-img-light" src="assets/eg-personas/video/solution-creator-claude-light.mp4" poster="assets/eg-personas/poster/solution-creator-claude-light.jpg" width="820" height="461" loop muted playsinline aria-label="Solution Creator redesigned landing page"></video>
+                  <video class="autoplay-video theme-img-dark" src="assets/eg-personas/video/solution-creator-claude-dark.mp4" poster="assets/eg-personas/poster/solution-creator-claude-dark.jpg" width="820" height="461" loop muted playsinline aria-label="Solution Creator redesigned landing page"></video>
+                </figure>
+                <div class="lead">
+                  <p><strong>Value the Redesign Provides:</strong> The redesigned dashboard shows asset relationships through an interactive Relationship Map. The optimization view flags unused assets (e.g., "Unused 90+ days") and redundant ones (e.g., "92% overlap") with direct links to them. Needs-attention alerts and performance metrics sit alongside net fraud losses prevented, making the impact of their work clear.</p>
+                  <p><strong>Pain Point Relieved:</strong> Without a view of dependencies and reuse, Solution Creators were blind to cost savings and the downstream effects of changes. Now they can see what depends on what and where assets are duplicated or idle, so they can optimize with confidence.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="section-divider wrap">
+
+
 
 
     <!-- ============ CLOSING CTA ============ -->
