@@ -21,6 +21,8 @@
     // Inside the homepage modal the page is as wide as the whole modal; --bleed is the modal's side padding, so content stays aligned and the strip can run edge to edge.
     var bm = /[?&]bleed=(\d+)/.exec(location.search);
     if (bm && document.documentElement.classList.contains('embed')) document.documentElement.style.setProperty('--bleed', bm[1] + 'px');
+    // R = where the page's elements live (the document here; a shadow root when the homepage shows this inside its modal). HOST = what the homepage provides (analytics, larger view, navigation).
+    var R = document, HOST = { embedded: false, track: function () {}, lightbox: null, navigate: null };
     window.addEventListener('message', function (ev) {
       if (ev.origin === location.origin && ev.source === window.parent && ev.data && ev.data.type === 'platform-details-bleed') document.documentElement.style.setProperty('--bleed', (+ev.data.px || 0) + 'px');
     });
@@ -248,10 +250,10 @@
   <script>
     // Infinite carousel for the persona screens: drag/swipe, arrows, keys or side-scroll, loops in both directions.
     (function () {
-      var root = document.querySelector('.pcar'); if (!root) return;
+      var root = R.querySelector('.pcar'); if (!root) return;
       // Analytics: this page has no Tag Manager of its own, so events are handed to the homepage window, which sends them.
       function sendTrack(event, params) {
-        try { window.parent.postMessage({ type: 'platform-details-track', event: event, params: params || {} }, location.origin); } catch (e) {}
+        try { HOST.track(event, params || {}); } catch (e) {}
       }
       window.__track = sendTrack;
       var vp = root.querySelector('.pcar-viewport'), track = root.querySelector('.pcar-track');
@@ -271,13 +273,13 @@
         c.setAttribute('aria-hidden', 'true'); c.removeAttribute('role'); c.removeAttribute('aria-label');
         c.querySelectorAll('img').forEach(function (im) { im.removeAttribute('role'); im.removeAttribute('aria-label'); im.setAttribute('tabindex', '-1'); });
       });
-      var embedded = document.documentElement.classList.contains('embed'), downImg = null;
+      var embedded = HOST.embedded, downImg = null;
       function openLarger(img) {
         var src = img.currentSrc || img.src;
         var pn = img.closest('.persona') && img.closest('.persona').querySelector('h4');
         sendTrack('image_enlarged', { persona: pn ? pn.textContent : '', view: img.classList.contains('img-plain') ? 'plain' : 'annotated' });
-        if (embedded) { try { window.parent.postMessage({ type: 'platform-details-lightbox', src: src, alt: img.alt }, location.origin); } catch (e) {} return; }
-        var lb = document.getElementById('lb'); if (!lb) return;
+        if (embedded) { try { HOST.lightbox(src, img.alt); } catch (e) {} return; }
+        var lb = R.getElementById('lb'); if (!lb) return;
         lb.querySelector('img').src = src; lb.querySelector('img').alt = img.alt; lb.showModal();
       }
       track.addEventListener('keydown', function (e) {
@@ -334,7 +336,7 @@
   </dialog>
   <script>
     (function () {
-      var lb = document.getElementById('lb'); if (!lb) return;
+      var lb = R.getElementById('lb'); if (!lb) return;
       lb.addEventListener('click', function () { lb.close(); });   // click/tap anywhere (or Esc) closes
     })();
   </script>
@@ -342,11 +344,11 @@
     // Research numbers count up the first time they scroll into view.
     // On its own the page uses IntersectionObserver; inside the homepage modal the homepage tells us which part of the page is visible.
     (function () {
-      var stats = document.querySelector('.stats'); if (!stats) return;
+      var stats = R.querySelector('.stats'); if (!stats) return;
       var nums = Array.prototype.slice.call(stats.querySelectorAll('.count'));
       var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) return;   // they already show their final values
-      var embedded = document.documentElement.classList.contains('embed'), done = false;
+      var embedded = false, done = false;
       nums.forEach(function (el) { el.textContent = '0'; });
       stats.classList.add('is-armed');
       function reveal() {
@@ -378,7 +380,7 @@
   <script>
     // Closing links: report the click to the homepage. Links that leave the modal wait a moment so the event is sent before the page changes.
     (function () {
-      document.querySelectorAll('.d-cta a, .d-footer a').forEach(function (a) {
+      R.querySelectorAll('.d-cta a, .d-footer a').forEach(function (a) {
         a.addEventListener('click', function (e) {
           var href = a.getAttribute('href') || '', link;
           if (/^mailto:/.test(href)) link = 'email';
@@ -387,9 +389,9 @@
           else link = 'next_case_study';
           if (window.__track) window.__track('footer_link_click', { page: 'platform_details', link: link, url: href });
           var leaves = a.target === '_top' && !(e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0);
-          if (leaves && window.parent !== window) {
+          if (leaves && HOST.navigate) {
             e.preventDefault();
-            setTimeout(function () { window.top.location.href = a.href; }, 200);
+            setTimeout(function () { HOST.navigate(a.href); }, 200);
           }
         });
       });
@@ -398,7 +400,7 @@
   <script>
     // Show-annotations switch: on = annotated screens, off = the same screens without annotations.
     (function () {
-      var sw = document.getElementById('notesSwitch'), car = document.querySelector('.pcar'); if (!sw || !car) return;
+      var sw = R.getElementById('notesSwitch'), car = R.querySelector('.pcar'); if (!sw || !car) return;
       sw.addEventListener('click', function () {
         var on = sw.getAttribute('aria-checked') !== 'true';
         sw.setAttribute('aria-checked', String(on));
@@ -411,13 +413,13 @@
     // Redesign recordings: load when they come near the screen, play while visible, pause when not.
     // On its own the page uses IntersectionObserver; inside the homepage modal the homepage tells us what part of the page is visible.
     (function () {
-      var vids = Array.prototype.slice.call(document.querySelectorAll('video.redesign')); if (!vids.length) return;
+      var vids = Array.prototype.slice.call(R.querySelectorAll('video.redesign')); if (!vids.length) return;
       var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) { vids.forEach(function (v) { v.controls = true; }); return; }   // no autoplay: poster + play button
       function setPlaying(v, on) {
         if (on) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause();
       }
-      if (document.documentElement.classList.contains('embed')) {
+      if (false) {
         window.addEventListener('message', function (ev) {
           if (ev.origin !== location.origin || ev.source !== window.parent || !ev.data || ev.data.type !== 'platform-details-view') return;
           vids.forEach(function (v) {

@@ -21,6 +21,8 @@
     // Inside the homepage modal the page is as wide as the whole modal; --bleed is the modal's side padding, so content stays aligned and the strip can run edge to edge.
     var bm = /[?&]bleed=(\d+)/.exec(location.search);
     if (bm && document.documentElement.classList.contains('embed')) document.documentElement.style.setProperty('--bleed', bm[1] + 'px');
+    // R = where the page's elements live (the document here; a shadow root when the homepage shows this inside its modal). HOST = what the homepage provides (analytics, larger view, navigation).
+    var R = document, HOST = { embedded: false, track: function () {}, lightbox: null, navigate: null };
     window.addEventListener('message', function (ev) {
       if (ev.origin === location.origin && ev.source === window.parent && ev.data && ev.data.type === 'platform-details-bleed') document.documentElement.style.setProperty('--bleed', (+ev.data.px || 0) + 'px');
     });
@@ -231,14 +233,14 @@
   <script>
     // Analytics: this page has no Tag Manager of its own, so events are handed to the homepage window, which sends them.
     function sendTrack(event, params) {
-      try { window.parent.postMessage({ type: 'platform-details-track', event: event, params: params || {} }, location.origin); } catch (e) {}
+      try { HOST.track(event, params || {}); } catch (e) {}
     }
     window.__track = sendTrack;
 
     // Tap/click any screen to see it larger (inside the homepage modal the homepage shows it, so it covers the whole window).
     (function () {
-      var embedded = document.documentElement.classList.contains('embed');
-      var lb = document.getElementById('lb');
+      var embedded = HOST.embedded;
+      var lb = R.getElementById('lb');
       if (lb) lb.addEventListener('click', function () { lb.close(); });
       function label(img) {
         var f = img.closest('article, figure'), h = f && f.querySelector('h4, figcaption b');
@@ -247,11 +249,11 @@
       function open(img) {
         var src = img.currentSrc || img.src;
         sendTrack('image_enlarged', { persona: label(img), view: 'screen' });
-        if (embedded) { try { window.parent.postMessage({ type: 'platform-details-lightbox', src: src, alt: img.alt }, location.origin); } catch (e) {} return; }
+        if (embedded) { try { HOST.lightbox(src, img.alt); } catch (e) {} return; }
         if (!lb) return;
         lb.querySelector('img').src = src; lb.querySelector('img').alt = img.alt; lb.showModal();
       }
-      document.querySelectorAll('img.zoomable').forEach(function (im) {
+      R.querySelectorAll('img.zoomable').forEach(function (im) {
         im.setAttribute('role', 'button'); im.setAttribute('tabindex', '0'); im.setAttribute('aria-label', 'View larger: ' + im.alt);
         im.addEventListener('click', function () { open(im); });
         im.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(im); } });
@@ -262,11 +264,11 @@
     // Count-up for the "5+" stat the first time it scrolls into view.
     // On its own the page uses IntersectionObserver; inside the homepage modal the homepage tells us which part of the page is visible.
     (function () {
-      var stats = document.querySelector('.stats'); if (!stats) return;
+      var stats = R.querySelector('.stats'); if (!stats) return;
       var nums = Array.prototype.slice.call(stats.querySelectorAll('.count'));
       var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) return;   // they already show their final values
-      var embedded = document.documentElement.classList.contains('embed'), done = false;
+      var embedded = false, done = false;
       nums.forEach(function (el) { el.textContent = '0'; });
       stats.classList.add('is-armed');
       function reveal() {
@@ -297,8 +299,8 @@
   <script>
     // Design-decision carousels: swipe (touch / trackpad), arrows, dots or arrow keys. The recording plays only while its slide is on screen.
     (function () {
-      var cars = Array.prototype.slice.call(document.querySelectorAll('.dcar')); if (!cars.length) return;
-      var embedded = document.documentElement.classList.contains('embed');
+      var cars = Array.prototype.slice.call(R.querySelectorAll('.dcar')); if (!cars.length) return;
+      var embedded = false;
       var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
       var view = null;                       // inside the modal: the part of this page that is on screen (sent by the homepage)
       var inViewSet = [];                    // standalone: carousels currently on screen
@@ -366,13 +368,13 @@
   <script>
     // Banner recording: load when it comes near the screen, play while visible, pause when not.
     (function () {
-      var vids = Array.prototype.slice.call(document.querySelectorAll('video.redesign')); if (!vids.length) return;
+      var vids = Array.prototype.slice.call(R.querySelectorAll('video.redesign')); if (!vids.length) return;
       var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) { vids.forEach(function (v) { v.controls = true; }); return; }
       function setPlaying(v, on) {
         if (on) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause();
       }
-      if (document.documentElement.classList.contains('embed')) {
+      if (false) {
         window.addEventListener('message', function (ev) {
           if (ev.origin !== location.origin || ev.source !== window.parent || !ev.data || ev.data.type !== 'platform-details-view') return;
           vids.forEach(function (v) {
@@ -393,7 +395,7 @@
   <script>
     // Closing links: report the click to the homepage. Links that leave the modal wait a moment so the event is sent before the page changes.
     (function () {
-      document.querySelectorAll('.d-cta a, .d-footer a').forEach(function (a) {
+      R.querySelectorAll('.d-cta a, .d-footer a').forEach(function (a) {
         a.addEventListener('click', function (e) {
           var href = a.getAttribute('href') || '', link;
           if (/^mailto:/.test(href)) link = 'email';
@@ -402,9 +404,9 @@
           else link = 'next_case_study';
           sendTrack('footer_link_click', { page: 'btc_details', link: link, url: href });
           var leaves = a.target === '_top' && !(e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0);
-          if (leaves && window.parent !== window) {
+          if (leaves && HOST.navigate) {
             e.preventDefault();
-            setTimeout(function () { window.top.location.href = a.href; }, 200);
+            setTimeout(function () { HOST.navigate(a.href); }, 200);
           }
         });
       });
